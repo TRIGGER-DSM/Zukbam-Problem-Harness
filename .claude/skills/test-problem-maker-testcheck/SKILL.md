@@ -36,6 +36,14 @@ A에서 [질문]이 남았으면 B로 가지 않고 보고한다. 정답이 확�
    - `시간 제한 문제` → 시간 제한이나 TC 크기를 조정해야 한다. 추천값과 함께 보고한다.
 4. 사용자 TC를 보강할지 [질문]한다. 승인하면 생성기로 그 풀이·변이를 잡는 TC를 만들어 `gen_tests.py P --start <사용자 TC 다음 번호>`로 **뒤에 추가**하고 2번부터 다시 한다.
 
+## C. 난이도 가늠 (`meta.json`의 `difficulty`가 있을 때)
+1. `test-problem-maker-fast-solver`를 **Agent 도구의 `model: "haiku"`로** 불러 `sol/probe-haiku.cpp`에 쓰게 한다 (문제 폴더 경로와 파일 경로만 준다).
+2. `python3 scripts/run.py P sol/probe-haiku.cpp`
+3. 판정이 아니라 신호로만 보고한다 (`rules/generate.md`의 "난이도 신호"):
+   - 목표가 플래티넘 이상인데 전부 통과 → "목표보다 쉬울 수 있음"
+   - 목표가 실버 이하인데 못 풂·실패 → "목표보다 어렵거나 지문이 부족할 수 있음"
+   - 그 밖은 그대로 적는다
+
 ## 끝 보고 (report.md)
 - A·B 각 스크립트의 마지막 출력 (그대로)
 - stress 대조 횟수와 불일치 여부

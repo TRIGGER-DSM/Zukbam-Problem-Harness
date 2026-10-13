@@ -6,13 +6,14 @@
 - tests/의 .in 중 .out이 없는 것: 정답을 실행해 .out을 쓴다
 - .out이 이미 있는 것(예제, 사용자가 준 TC): 덮어쓰지 않고 정답 출력과 비교한다
 - --overwrite: tests/의 .out을 모두 다시 쓴다 (examples/는 절대 덮어쓰지 않는다)
+- 예제 .out은 출제자가 준다. 단 AI가 만든 문제(meta.json의 mode가 1)는 없는 예제 .out도 정답으로 만든다
 시간 제한은 보지 않는다(최대 60초). 시간 제한 검사는 verdicts.py가 한다.
 
 출력 줄(고정 문구):
   작성: <TC .out>
   정답과 다름: <TC>
   실행 실패: <TC> (<시간 초과|런타임 에러>)
-  예제 출력 없음: <TC>          (예제 .out은 출제자가 준다. 만들지 않는다)
+  예제 출력 없음: <TC>          (mode가 1이 아니면 예제 .out을 만들지 않는다)
   컴파일 에러: sol/main.cpp
   결과: 작성 <a>, 일치 <b>, 다름 <c>, 실패 <d>
 종료 코드: 다름·실패가 없으면 0, 있으면 1
@@ -43,7 +44,7 @@ def main():
     for inp in list_cases(root):
         name = f"{inp.parent.name}/{inp.name}"
         ans = inp.with_suffix(".out")
-        if inp.parent.name == "examples" and not ans.is_file():
+        if inp.parent.name == "examples" and not ans.is_file() and meta.get("mode") != 1:
             print(f"예제 출력 없음: {name}")
             failed += 1
             continue

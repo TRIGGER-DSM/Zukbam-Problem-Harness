@@ -276,6 +276,19 @@ class PipelineTest(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("정답과 다름: tests/1.in", out)
 
+    def test_make_outputs_example_out_only_in_mode1(self):
+        (self.p / "examples" / "2.in").write_text("4 5\n")
+        code, out = run(SCRIPT["make_outputs"], self.p)
+        self.assertEqual(code, 1)
+        self.assertIn("예제 출력 없음: examples/2.in", out)
+        meta = json.loads((self.p / "meta.json").read_text())
+        meta["mode"] = 1  # AI가 만든 문제는 예제 출력도 정답으로 만든다
+        (self.p / "meta.json").write_text(json.dumps(meta))
+        code, out = run(SCRIPT["make_outputs"], self.p)
+        self.assertEqual(code, 0, out)
+        self.assertIn("작성: examples/2.out", out)
+        self.assertEqual((self.p / "examples" / "2.out").read_text(), "9\n")
+
     # stress
     def test_stress_agree(self):
         code, out = run(SCRIPT["stress"], self.p, "--gen", "5 {seed}", "--count", "20")
@@ -348,12 +361,67 @@ class PipelineTest(unittest.TestCase):
 
 
 
+# ---- 참고 문제 조회 ----
+
+REFS_DATA = {
+    "fetched": "2026-10-13",
+    "tags": {"dp": {"ko": "다이나믹 프로그래밍", "aliases": ["동적계획법"]},
+             "prefix_sum": {"ko": "누적 합", "aliases": ["구간합"]}},
+    "problems": [
+        {"id": 1, "title": "가", "level": 13, "solved": 50, "tags": ["dp", "prefix_sum"]},
+        {"id": 2, "title": "나", "level": 13, "solved": 40, "tags": ["dp"]},
+        {"id": 3, "title": "다", "level": 13, "solved": 30, "tags": ["prefix_sum"]},
+        {"id": 4, "title": "라", "level": 8, "solved": 90, "tags": ["dp"]},
+    ],
+}
+
+
+class RefsTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.data = Path(cls.tmp.name) / "refs.json"
+        cls.data.write_text(json.dumps(REFS_DATA, ensure_ascii=False), encoding="utf-8")
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def refs(self, *args):
+        return run(ROOT / "scripts" / "refs.py", *args, "--data", self.data)
+
+    def test_query(self):
+        code, out = self.refs("동적 계획법", "골드 3")
+        self.assertEqual(code, 0, out)
+        self.assertIn("태그: dp (다이나믹 프로그래밍)", out)
+        self.assertIn("티어: 골드 3", out)
+        self.assertIn("표본: 이 티어 3문제 중 2문제", out)
+        self.assertIn("함께 붙는 태그: 누적 합 1", out)
+        self.assertIn("대표 문제: 1 가 [다이나믹 프로그래밍, 누적 합] (푼 사람 50)", out)
+        self.assertIn("티어별 분포: 실버 3 1, 골드 3 2", out)
+
+    def test_tier_formats(self):
+        for tier in ("g3", "G3", "골드3"):
+            self.assertIn("티어: 골드 3", self.refs("dp", tier)[1])
+
+    def test_not_found(self):
+        code, out = self.refs("xyz", "g3")
+        self.assertEqual(code, 1)
+        self.assertIn("태그를 찾지 못함: xyz", out)
+        code, out = self.refs("dp", "금3")
+        self.assertIn("티어를 읽지 못함: 금3", out)
+        code, out = self.refs("누적합", "s3")  # 이 티어 표본에 없음
+        self.assertEqual(code, 1)
+        self.assertIn("표본: 이 티어 1문제 중 0문제", out)
+
+
 # ---- 서브에이전트 파일 접근 훅 ----
 
 GUARD = ROOT / "scripts" / "agent_guard.py"
 BLIND = "test-problem-maker-blind-solver"
 VWRITER = "test-problem-maker-validator-writer"
 WSOLVER = "test-problem-maker-wrong-solver"
+FSOLVER = "test-problem-maker-fast-solver"
 
 
 def guard(agent, tool, tool_input, cwd):
@@ -442,6 +510,29 @@ class GuardTest(unittest.TestCase):
         self.assertEqual(b("g++ -O2 -o /tmp/w sol/wrong_answer/minus.cpp && /tmp/w < examples/1.in"), 0)
         self.assertEqual(b("cat sol/main.cpp"), 2)
         self.assertEqual(b("cat tests/1.in"), 2)
+
+    def test_fast_solver(self):
+        self.assertEqual(self.read(FSOLVER, "problem.md"), 0)
+        for rel in ("sol/main.cpp", "sol/brute.cpp", "sol/wrong_answer/minus.cpp", "tests/1.in"):
+            self.assertEqual(self.read(FSOLVER, rel), 2, rel)
+        w = lambda rel: guard(FSOLVER, "Write", {"file_path": str(self.p / rel)}, ROOT)
+        self.assertEqual(w("sol/accepted/blind-fast.cpp"), 0)
+        self.assertEqual(w("sol/probe-haiku.cpp"), 0)
+        self.assertEqual(w("sol/accepted/other.cpp"), 2)
+        self.assertEqual(w("sol/main.cpp"), 2)
+        b = lambda cmd: guard(FSOLVER, "Bash", {"command": cmd}, self.p)
+        self.assertEqual(b("g++ -O2 -o /tmp/f sol/probe-haiku.cpp && /tmp/f < examples/1.in"), 0)
+        self.assertEqual(b("cat sol/main.cpp"), 2)
+
+    def test_bash_cd_then_bare_name(self):
+        # 실제 실행에서 wrong-solver가 `cd sol; cat README.md`로 정답 근거를 읽었다
+        sol = self.p / "sol"
+        self.assertEqual(guard(WSOLVER, "Bash", {"command": f"cd {sol}; ls wrong_answer; cat README.md"}, ROOT), 2)
+        self.assertEqual(guard(BLIND, "Bash", {"command": f"cd {sol} && cat main.cpp"}, ROOT), 2)
+        self.assertEqual(guard(FSOLVER, "Bash", {"command": f"cd {sol}/accepted && cat other.cpp"}, ROOT), 2)
+        self.assertEqual(guard(WSOLVER, "Bash", {"command": "cat ../tests/1.in"}, sol), 2)
+        # 슬러그에 이름이 들어 있는 것은 막지 않는다
+        self.assertEqual(guard(WSOLVER, "Bash", {"command": "cd /x/problems/charger-gen/sol/wrong_answer && g++ a.cpp"}, ROOT), 0)
 
     def test_grep_denied(self):
         self.assertEqual(guard(BLIND, "Grep", {"pattern": "x", "path": str(self.p)}, ROOT), 2)

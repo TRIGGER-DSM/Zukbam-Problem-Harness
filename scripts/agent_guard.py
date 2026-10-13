@@ -18,29 +18,49 @@ from pathlib import Path
 
 HARNESS = Path(__file__).resolve().parent.parent
 WRONG_DIRS = r"sol/(wrong_answer|time_limit_exceeded|runtime_error)(/.*)?"
+FAST_FILES = r"sol/(accepted/blind-fast|probe-[\w-]+)\.cpp"
+
+# Bash는 경로가 아니라 파일·폴더 이름으로 본다. `cd sol; cat README.md`처럼 폴더에 들어간 뒤
+# 이름만으로 읽는 것도 막기 위해서다 (실제 실행에서 이렇게 정답 근거를 읽은 일이 있었다).
+W = r"(?<![\w-])"  # 슬러그(예: charger-gen)의 일부는 이름으로 보지 않는다
+NAMES = {
+    "readme": W + r"README\.md", "main": W + r"main\.(cpp|py)\b", "brute": W + r"brute\.cpp",
+    "blind2": W + r"blind-2\.cpp", "fast": W + r"blind-fast\.cpp", "probe": W + r"probe-[\w-]+\.cpp",
+    "accepted": W + r"accepted(?![\w-])", "wrong": W + r"(wrong_answer|time_limit_exceeded|runtime_error)(?![\w-])",
+    "tests": W + r"tests(?![\w-])", "gen": W + r"gen(?![\w-])", "validator": r"validator",
+    "invalid": W + r"invalid(?![\w-])", "checker": r"checker", "report": W + r"report\.md",
+    "state": W + r"state\.md", "eval": W + r"eval(?![\w-])",
+}
+
+
+def forbid(*allowed):
+    return [pattern for name, pattern in NAMES.items() if name not in allowed]
+
 
 POLICIES = {
     "test-problem-maker-blind-solver": {
         "read": [r"problem\.md", r"examples(/.*)?", r"sol/brute\.cpp", r"sol/blind-2\.cpp"],
         "write": [r"sol/brute\.cpp", r"sol/blind-2\.cpp"],
         "harness_read": [],
-        "bash_forbidden": [r"sol/(?!brute\.cpp|blind-2\.cpp)", r"\btests/", r"\bgen/", r"validator",
-                           r"checker", r"invalid/", r"report\.md", r"state\.md", r"\beval/"],
+        "bash_forbidden": forbid("brute", "blind2"),
     },
     "test-problem-maker-validator-writer": {
         "read": [r"problem\.md", r"examples(/.*)?", r"validator\.py", r"invalid(/.*)?"],
         "write": [r"validator\.py", r"invalid/.*"],
         "harness_read": [r"rules/package\.md", r"scripts/vlib\.py"],
-        "bash_forbidden": [r"\bsol/", r"\btests/", r"\bgen/", r"checker", r"report\.md",
-                           r"state\.md", r"\beval/"],
+        "bash_forbidden": forbid("validator", "invalid"),
+    },
+    "test-problem-maker-fast-solver": {
+        "read": [r"problem\.md", r"examples(/.*)?", FAST_FILES],
+        "write": [FAST_FILES],
+        "harness_read": [],
+        "bash_forbidden": forbid("fast", "probe", "accepted") + [W + r"accepted(?!/blind-fast\.cpp)"],
     },
     "test-problem-maker-wrong-solver": {
         "read": [r"problem\.md", r"examples(/.*)?", WRONG_DIRS],
         "write": [WRONG_DIRS],
         "harness_read": [],
-        "bash_forbidden": [r"sol/(?!wrong_answer/|time_limit_exceeded/|runtime_error/)", r"\btests/",
-                           r"\bgen/", r"validator", r"checker", r"invalid/", r"report\.md",
-                           r"state\.md", r"\beval/"],
+        "bash_forbidden": forbid("wrong"),
     },
 }
 # 어느 에이전트든 Bash에서 막는 넓은 탐색

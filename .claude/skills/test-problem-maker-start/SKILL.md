@@ -16,7 +16,7 @@ description: 코딩테스트 문제 생성·지문 검토·테스트케이스 �
 
 | 사용자가 준 것 | 모드 | 시작 스킬 |
 |---|---|---|
-| 풀이 방식 + 키워드 + 난이도 (기존 문제 변형 포함) | 1 | `test-problem-maker-generate` |
+| 풀이 방식 + 키워드 + 난이도 (기존 문제 변형 포함) | 1 | `test-problem-maker-generate` → `test-problem-maker-statement-review` → `test-problem-maker-testgen` → `test-problem-maker-testcheck` |
 | 지문만 | 2 | `test-problem-maker-statement-review` → `test-problem-maker-testgen` → `test-problem-maker-testcheck` |
 | 지문 + 테스트케이스 | 3 | `test-problem-maker-testcheck` |
 

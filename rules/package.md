@@ -17,7 +17,8 @@ problems/<슬러그>/
 │  ├─ main.py                Python 정답 (시간 제한 확인용)
 │  ├─ brute.cpp              지문을 그대로 따르는 brute-force (blind-solver가 씀)
 │  ├─ blind-2.cpp            (지문 검토 때) 두 번째 blind-solver의 풀이. verdicts.py가 돌리지 않음
-│  ├─ accepted/              그 밖의 정답 (독립적으로 쓴 두 번째 정답 등)
+│  ├─ accepted/              그 밖의 정답. blind-fast.cpp는 fast-solver가 지문만 보고 쓴 두 번째 정답
+│  ├─ probe-haiku.cpp        (난이도 가늠) 낮은 모델이 쓴 풀이. verdicts.py가 돌리지 않음
 │  ├─ wrong_answer/          오답이 나야 하는 풀이 (wrong-solver 에이전트가 씀. mutant-*.cpp는 변이 테스트가 찾은 것)
 │  ├─ time_limit_exceeded/   시간 초과가 나야 하는 풀이 (최대한 최적화한 버전)
 │  └─ runtime_error/         런타임 에러가 나야 하는 풀이
