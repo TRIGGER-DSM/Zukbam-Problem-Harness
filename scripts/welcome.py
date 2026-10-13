@@ -16,6 +16,12 @@ FIRST = """처음 쓰시는군요! 시작하기 전에 주로 쓸 모델부터 �
   (Pro 요금제면 Sonnet + 보조 Haiku를 추천해요. 토큰을 가장 아낄 수 있어요.)
 
 """
+# 실측 (2026-10-13, 생성부터 TC 검증까지 문제 하나): Sonnet 출력 약 3.6만 토큰·API 가격 $0.89, Opus $2.3~3.1
+TOKENS = """[토큰 안내] 문제 하나를 끝까지(생성~TC 검증) 만들면 Sonnet 기준 출력 약 4만 토큰(API 가격 약 $0.9), Opus는 그 2~3배가 들어요.
+개인 플러그인·MCP를 켠 채 열면 요청마다 약 2만 토큰이 더 들어요. 필요 없으면 끄고 아래처럼 다시 여세요 (이미 이렇게 열었다면 무시하세요).
+  claude --setting-sources project,local --strict-mcp-config
+
+"""
 MENU = """안녕하세요! Zukbam 문제 하네스예요. 무엇을 도와드릴까요?
 
   1. 새 문제 만들기
@@ -52,7 +58,7 @@ def main():
         first = ""
     else:
         model, first = "", FIRST
-    menu = first + MENU.format(resume=resume, model=model)
+    menu = TOKENS + first + MENU.format(resume=resume, model=model)
     context = ("사용자에게 아래 메뉴를 이미 보여 줬다. 사용자가 번호나 짧은 말로 답하면 그 일로 보고 "
                "test-problem-maker-start 스킬을 부른다. 필요한 것이 빠졌으면 빠진 것만 묻는다.")
     if first:

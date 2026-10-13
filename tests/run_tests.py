@@ -374,6 +374,7 @@ class WelcomeTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             out = self.welcome(Path(d))
             self.assertIn("1. 새 문제 만들기", out["systemMessage"])
+            self.assertIn("[토큰 안내]", out["systemMessage"])
             self.assertIn("4. 가지고 있는 테스트케이스 검증", out["systemMessage"])
             self.assertNotIn("이어서 하기", out["systemMessage"])
             self.assertEqual(out["hookSpecificOutput"]["hookEventName"], "SessionStart")
