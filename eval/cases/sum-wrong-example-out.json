@@ -1,0 +1,11 @@
+{
+  "base": "ant-food-sum",
+  "item": "S9",
+  "detector": "script",
+  "script": "make_outputs",
+  "description": "지문 예제 출력이 틀렸다",
+  "changes": {
+    "examples/1.out": "5\n2\n-1\n"
+  },
+  "expect": "정답과 다름: examples/1.in"
+}

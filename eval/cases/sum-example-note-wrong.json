@@ -1,0 +1,15 @@
+{
+  "base": "ant-food-sum",
+  "item": "S9",
+  "detector": "ai",
+  "description": "예제 설명의 계산이 예제 출력과 다르다",
+  "changes": {
+    "problem.md": {
+      "replace": [
+        "$2 + (-1) + 4 = 5$",
+        "$2 + (-1) + 4 = 6$"
+      ]
+    }
+  },
+  "expect": "예제 설명(6)과 예제 출력(5)이 다름"
+}

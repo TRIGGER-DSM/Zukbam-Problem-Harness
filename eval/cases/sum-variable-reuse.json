@@ -1,0 +1,15 @@
+{
+  "base": "ant-food-sum",
+  "item": "S7",
+  "detector": "ai",
+  "description": "Q 대신 N을 다시 써서 같은 변수 이름이 두 대상을 가리킨다",
+  "changes": {
+    "problem.md": {
+      "replace": [
+        "개미가 $Q$번 산책을 한다.",
+        "개미가 $N$번 산책을 한다."
+      ]
+    }
+  },
+  "expect": "N이 칸 수와 산책 횟수를 동시에 가리킴"
+}

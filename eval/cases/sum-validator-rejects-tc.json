@@ -1,0 +1,11 @@
+{
+  "base": "ant-food-sum",
+  "item": "T1",
+  "detector": "script",
+  "script": "validate",
+  "description": "숨은 TC에 N보다 많은 수가 들어 있다",
+  "changes": {
+    "tests/3.in": "2 1\n0 0 0\n1 1\n"
+  },
+  "expect": "validator 거부: tests/3.in"
+}

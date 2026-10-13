@@ -1,0 +1,28 @@
+#include <cstdio>
+#include <queue>
+#include <string>
+#include <vector>
+int main() {
+    int n, m;
+    scanf("%d %d", &n, &m);
+    std::vector<std::string> g(n);
+    static char buf[1005];
+    for (auto& row : g) scanf("%s", buf), row = buf;
+    std::vector<int> dist(n * m, -1);
+    std::queue<int> q;
+    dist[0] = 0;
+    q.push(0);
+    const int dr[] = {1, -1, 0, 0}, dc[] = {0, 0, 1, -1};
+    while (!q.empty()) {
+        int cur = q.front(); q.pop();
+        int r = cur / m, c = cur % m;
+        for (int d = 0; d < 4; d++) {
+            int nr = r + dr[d], nc = c + dc[d];
+            if (nr < 0 || nr >= n || nc < 0 || nc >= m || g[nr][nc] == '#') continue;
+            if (dist[nr * m + nc] != -1) continue;
+            dist[nr * m + nc] = dist[cur] + 1;
+            q.push(nr * m + nc);
+        }
+    }
+    printf("%d\n", dist[n * m - 1]);
+}

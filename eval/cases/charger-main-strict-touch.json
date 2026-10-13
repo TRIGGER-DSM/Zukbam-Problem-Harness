@@ -1,0 +1,16 @@
+{
+  "base": "robot-charger",
+  "item": "S9",
+  "detector": "script",
+  "script": "make_outputs",
+  "description": "주 정답이 맞닿음을 겹침으로 본다 (예제로 잡힘)",
+  "changes": {
+    "sol/main.cpp": {
+      "replace": [
+        "if (s >= last)",
+        "if (s > last || cnt == 0)"
+      ]
+    }
+  },
+  "expect": "정답과 다름: examples/1.in"
+}

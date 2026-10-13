@@ -1,0 +1,16 @@
+{
+  "base": "ant-food-sum",
+  "item": "T6",
+  "detector": "script",
+  "script": "gen_tests",
+  "description": "생성기가 시드를 쓰지 않는다",
+  "changes": {
+    "gen/gen.py": {
+      "replace": [
+        "rnd = random.Random(f\"{n} {q} {mode} {seed}\")",
+        "rnd = random.Random()"
+      ]
+    }
+  },
+  "expect": "비결정적:"
+}

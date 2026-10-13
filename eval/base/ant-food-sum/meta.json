@@ -1,0 +1,9 @@
+{
+  "title": "개미의 먹이 구간",
+  "method": "누적합",
+  "keywords": ["개미", "먹이"],
+  "difficulty": "실버 3",
+  "time_limit_ms": 1000,
+  "memory_mb": 256,
+  "mode": 2
+}

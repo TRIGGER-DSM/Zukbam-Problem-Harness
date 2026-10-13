@@ -1,0 +1,11 @@
+{
+  "base": "robot-charger",
+  "item": "T19",
+  "detector": "script",
+  "script": "verdicts",
+  "description": "덮는 신청·랜덤 TC가 없어 시작 순 그리디가 통과한다",
+  "changes": {
+    "gen/tests.txt": "1 small 1\n1000 touch 1\n200000 touch 1\n200000 bridge 1\n200000 same 1\n"
+  },
+  "expect": "기대와 다름: sol/wrong_answer/sort-by-start.cpp"
+}

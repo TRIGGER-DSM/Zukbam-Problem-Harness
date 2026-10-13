@@ -1,0 +1,17 @@
+{
+  "base": "ant-maze",
+  "item": "T3",
+  "detector": "script",
+  "script": "validate",
+  "description": "validator가 출발 칸이 빈칸인지 검사하지 않는다",
+  "changes": {
+    "validator.py": {
+      "replace": [
+        "r.ensure(grid[0][0] == \".\", \"(1, 1)이 벽\")\n",
+        ""
+      ]
+    },
+    "invalid/start-wall.in": "2 2\n#.\n..\n"
+  },
+  "expect": "거부 안 함: invalid/start-wall.in"
+}

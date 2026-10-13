@@ -1,0 +1,17 @@
+{
+  "base": "robot-charger",
+  "item": "T3",
+  "detector": "script",
+  "script": "validate",
+  "description": "validator가 s < e를 검사하지 않는다",
+  "changes": {
+    "validator.py": {
+      "replace": [
+        "    r.ensure(s < e, f\"s_i={s} >= e_i={e}\")\n",
+        ""
+      ]
+    },
+    "invalid/zero-length.in": "1\n5 5\n"
+  },
+  "expect": "거부 안 함: invalid/zero-length.in"
+}

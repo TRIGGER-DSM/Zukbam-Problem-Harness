@@ -1,0 +1,11 @@
+{
+  "base": "ant-food-sum",
+  "item": "T2",
+  "detector": "script",
+  "script": "validate",
+  "description": "validator가 공백·줄바꿈을 검사하지 않는다 (split으로 읽음)",
+  "changes": {
+    "validator.py": "import sys\nsys.stdin.read().split()\n"
+  },
+  "expect": "거부 안 함: 줄 끝 공백"
+}

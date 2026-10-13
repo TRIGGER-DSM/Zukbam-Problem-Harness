@@ -1,0 +1,13 @@
+{
+  "base": "ant-food-sum",
+  "item": "T17",
+  "detector": "script",
+  "script": "verdicts",
+  "description": "큰 값 TC가 없어 int 오버플로 풀이가 통과한다 (작은 값 TC만 있음)",
+  "changes": {
+    "gen/tests.txt": "1 1 small 1\n5 10 small 2\n8 8 small 3\n",
+    "examples/2.in": null,
+    "examples/2.out": null
+  },
+  "expect": "기대와 다름: sol/wrong_answer/int-overflow.cpp"
+}

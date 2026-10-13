@@ -1,0 +1,16 @@
+{
+  "base": "ant-food-sum",
+  "item": "T10",
+  "detector": "script",
+  "script": "validate",
+  "description": "같은 입력이 두 번 들어 있다",
+  "changes": {
+    "tests/14.in": {
+      "copy": "tests/1.in"
+    },
+    "tests/14.out": {
+      "copy": "tests/1.out"
+    }
+  },
+  "expect": "중복 입력: tests/14.in = tests/1.in"
+}

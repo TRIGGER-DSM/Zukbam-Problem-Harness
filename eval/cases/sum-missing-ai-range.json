@@ -1,0 +1,15 @@
+{
+  "base": "ant-food-sum",
+  "item": "S1",
+  "detector": "ai",
+  "description": "a_i의 범위가 지문에서 빠졌다",
+  "changes": {
+    "problem.md": {
+      "replace": [
+        " ($-10^9 \\le a_i \\le 10^9$)",
+        ""
+      ]
+    }
+  },
+  "expect": "a_i의 범위가 없음"
+}

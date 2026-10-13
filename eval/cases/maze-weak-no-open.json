@@ -1,0 +1,16 @@
+{
+  "base": "ant-maze",
+  "item": "T19",
+  "detector": "script",
+  "script": "verdicts",
+  "description": "큰 빈 격자 TC가 없어 DFS 첫 경로 풀이가 통과한다",
+  "changes": {
+    "gen/tests.txt": {
+      "replace": [
+        "1000 1000 open 1\n",
+        ""
+      ]
+    }
+  },
+  "expect": "기대와 다름: sol/wrong_answer/dfs-first-path.cpp"
+}

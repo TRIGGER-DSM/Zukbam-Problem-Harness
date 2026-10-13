@@ -1,0 +1,11 @@
+{
+  "base": "ant-food-sum",
+  "item": "T11",
+  "detector": "script",
+  "script": "validate",
+  "description": "숨은 TC 줄 끝에 공백이 있다",
+  "changes": {
+    "tests/2.in": "2 3\n1 2 \n1 1\n1 2\n2 2\n"
+  },
+  "expect": "형식 문제: tests/2.in 줄 끝 공백"
+}

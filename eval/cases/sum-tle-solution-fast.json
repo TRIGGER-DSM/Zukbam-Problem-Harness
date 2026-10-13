@@ -1,0 +1,13 @@
+{
+  "base": "ant-food-sum",
+  "item": "T21",
+  "detector": "script",
+  "script": "verdicts",
+  "description": "time_limit_exceeded 폴더의 풀이가 사실 빠르다",
+  "changes": {
+    "sol/time_limit_exceeded/naive.cpp": {
+      "copy": "sol/main.cpp"
+    }
+  },
+  "expect": "기대와 다름: sol/time_limit_exceeded/naive.cpp"
+}

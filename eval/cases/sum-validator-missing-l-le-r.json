@@ -1,0 +1,17 @@
+{
+  "base": "ant-food-sum",
+  "item": "T3",
+  "detector": "script",
+  "script": "validate",
+  "description": "validator가 l ≤ r을 검사하지 않는다",
+  "changes": {
+    "validator.py": {
+      "replace": [
+        "    r.ensure(l <= rr, f\"l={l} > r={rr}\")\n",
+        ""
+      ]
+    },
+    "invalid/l-greater.in": "3 1\n1 2 3\n3 1\n"
+  },
+  "expect": "거부 안 함: invalid/l-greater.in"
+}

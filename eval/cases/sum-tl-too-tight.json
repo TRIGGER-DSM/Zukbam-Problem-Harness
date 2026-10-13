@@ -1,0 +1,16 @@
+{
+  "base": "ant-food-sum",
+  "item": "T20",
+  "detector": "script",
+  "script": "verdicts",
+  "description": "시간 제한이 너무 빡빡해 Python 정답이 2배 여유 안에 들지 않는다",
+  "changes": {
+    "meta.json": {
+      "replace": [
+        "\"time_limit_ms\": 1000",
+        "\"time_limit_ms\": 300"
+      ]
+    }
+  },
+  "expect": "시간 제한 문제: T_ac×2"
+}

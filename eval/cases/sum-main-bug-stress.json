@@ -1,0 +1,24 @@
+{
+  "base": "ant-food-sum",
+  "item": "T13",
+  "detector": "script",
+  "script": "stress",
+  "description": "주 정답이 l = r일 때 0을 출력한다 (.out도 함께 틀려져 stress로만 잡힘)",
+  "changes": {
+    "sol/main.cpp": {
+      "replace": [
+        "printf(\"%lld\\n\", pre[r] - pre[l - 1]);",
+        "printf(\"%lld\\n\", l == r ? 0LL : pre[r] - pre[l - 1]);"
+      ]
+    },
+    "examples/1.in": "5 2\n3 2 -1 4 -5\n2 4\n1 5\n",
+    "examples/1.out": "5\n3\n"
+  },
+  "args": [
+    "--gen",
+    "8 8 small {seed}",
+    "--count",
+    "50"
+  ],
+  "expect": "불일치:"
+}

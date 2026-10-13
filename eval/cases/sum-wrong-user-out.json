@@ -1,0 +1,11 @@
+{
+  "base": "ant-food-sum",
+  "item": "T12",
+  "detector": "script",
+  "script": "make_outputs",
+  "description": "사용자가 준 .out 하나가 틀렸다 (3번 모드)",
+  "changes": {
+    "tests/2.out": "1\n1\n1\n"
+  },
+  "expect": "정답과 다름: tests/2.in"
+}

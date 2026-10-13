@@ -1,0 +1,22 @@
+# 작은 경우
+1 2 open 1
+2 1 open 1
+3 3 random30 1
+6 7 random35 2
+# 도착 불가, 대각선, DFS 함정
+5 5 blocked 1
+1000 1000 blocked 1
+4 4 corner 1
+1000 1000 corner 1
+6 6 detour 1
+1000 1000 detour 1
+# 방향 배열 오타 (변이 테스트가 찾은 구멍: 위·오른쪽 이동이 틀린 BFS)
+4 4 random30 49
+5 6 random40 5
+# 최대 크기
+1000 1000 open 1
+1000 1000 snake 1
+1000 1 open 1
+1 1000 open 1
+1000 1000 random20 1
+1000 1000 random40 2

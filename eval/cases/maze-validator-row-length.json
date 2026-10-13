@@ -1,0 +1,17 @@
+{
+  "base": "ant-maze",
+  "item": "T3",
+  "detector": "script",
+  "script": "validate",
+  "description": "validator가 행 길이를 검사하지 않는다 (짧은 행에서 예외로 죽어 우연히 '거부'처럼 보임)",
+  "changes": {
+    "validator.py": {
+      "replace": [
+        "f\"[.#]{{{m}}}\"",
+        "\"[.#]+\""
+      ]
+    },
+    "invalid/short-row.in": "2 3\n...\n..\n"
+  },
+  "expect": "validator 오류: invalid/short-row.in"
+}

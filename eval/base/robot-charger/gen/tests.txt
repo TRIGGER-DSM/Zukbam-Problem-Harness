@@ -1,0 +1,15 @@
+# 작은 경우
+1 small 1
+2 small 1
+8 small 2
+15 small 3
+# 함정: 맞닿음, 덮는 신청, 다리, 전부 같음
+1000 touch 1
+200000 touch 1
+200000 nested 1
+200000 bridge 1
+200000 same 1
+# 랜덤
+1000 random 1
+200000 random 1
+200000 random 2
