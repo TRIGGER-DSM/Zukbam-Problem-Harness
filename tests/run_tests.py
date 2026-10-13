@@ -361,6 +361,35 @@ class PipelineTest(unittest.TestCase):
 
 
 
+# ---- 시작 메뉴 ----
+
+class WelcomeTest(unittest.TestCase):
+    def welcome(self, root):
+        # welcome.py는 자기 위치 기준으로 problems/를 보므로 harness 사본에서 돌린다
+        shutil.copytree(ROOT / "scripts", root / "scripts")
+        r = subprocess.run([sys.executable, str(root / "scripts" / "welcome.py")], capture_output=True, text=True)
+        return json.loads(r.stdout)
+
+    def test_menu(self):
+        with tempfile.TemporaryDirectory() as d:
+            out = self.welcome(Path(d))
+            self.assertIn("1. 새 문제 만들기", out["systemMessage"])
+            self.assertIn("4. 가지고 있는 테스트케이스 검증", out["systemMessage"])
+            self.assertNotIn("이어서 하기", out["systemMessage"])
+            self.assertEqual(out["hookSpecificOutput"]["hookEventName"], "SessionStart")
+
+    def test_menu_lists_unfinished(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            for name, stage in (("a", "reviewed"), ("b", "done")):
+                (root / "problems" / name).mkdir(parents=True)
+                (root / "problems" / name / "state.md").write_text(f"stage: {stage}\nmode: 2\n")
+            out = self.welcome(root)
+            self.assertIn("5. 이어서 하기", out["systemMessage"])
+            self.assertIn("- a (단계: reviewed)", out["systemMessage"])
+            self.assertNotIn("- b", out["systemMessage"])
+
+
 # ---- 참고 문제 조회 ----
 
 REFS_DATA = {

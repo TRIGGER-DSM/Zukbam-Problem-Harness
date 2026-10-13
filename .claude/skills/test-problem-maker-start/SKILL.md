@@ -20,7 +20,9 @@ description: 코딩테스트 문제 생성·지문 검토·테스트케이스 �
 | 지문만 | 2 | `test-problem-maker-statement-review` → `test-problem-maker-testgen` → `test-problem-maker-testcheck` |
 | 지문 + 테스트케이스 | 3 | `test-problem-maker-testcheck` |
 
-- 판별이 애매하면 묻는다.
+- 세션을 시작하면 사용자에게 메뉴가 보인다 (`scripts/welcome.py`). 사용자가 번호로 답하면: 1 → 1번 모드, 2 → 2번 모드, 3 → 2번 모드의 지문 검토까지만, 4 → 3번 모드, 5 → 이어서 하기(1절).
+- 그 모드에 필요한 것이 빠졌으면 빠진 것만 묻는다. 선택지가 있는 질문(난이도, 풀이 방식 등)은 AskUserQuestion으로 고르게 하고, 예시를 붙인다.
+- 판별이 애매하면 메뉴의 선택지로 묻는다.
 - 여러 문제를 한 번에 요청하면 문제마다 아래 3~5를 따로 한다.
 
 ## 3. 문제 폴더 만들기
