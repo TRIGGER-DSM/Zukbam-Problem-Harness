@@ -9,6 +9,17 @@ description: 코딩테스트 문제 생성·지문 검토·테스트케이스 �
 
 **직접 검토하거나 만들지 않는다.** 요청이 "지문 검토만"이어도 반드시 3절대로 문제 폴더를 만들고, 4절의 스킬을 Skill 도구로 호출해 그 절차를 따른다. 혼자 읽고 판단한 결과는 독립 풀이 대조와 스크립트 판정이 없어서 보고할 수 없다.
 
+## 0. 모델 정하기 (`harness.local.json`이 없거나, 사용자가 바꾸자고 할 때)
+AskUserQuestion으로 두 가지를 묻는다 (쓸 수 없는 환경이면 같은 선택지를 글로 묻는다).
+1. 주로 쓸 메인 모델: **Sonnet (추천, Pro 요금제)** / Opus (품질 우선, Max 요금제) / Haiku (가장 적은 토큰, 품질이 떨어질 수 있음)
+2. 보조 에이전트(blind-solver, validator-writer, wrong-solver, fast-solver) 모델: **Haiku (추천, 토큰 절약)** / 메인과 같게
+
+답을 받으면:
+- `harness.local.json`에 `{"main_model": "<sonnet|opus|haiku>", "helper_model": "<haiku|sonnet|opus|same>"}`을 쓴다.
+- `.claude/settings.local.json`에 `{"model": "<메인 모델>"}`을 쓴다 (파일이 있으면 `model`만 바꾼다). 다음에 열 때부터 적용된다.
+- 사용자에게 알린다: "지금 대화의 모델은 바로 바뀌지 않아요. 바로 바꾸려면 `/model <메인 모델>`을 입력해 주세요."
+- 그다음 원래 요청으로 돌아간다.
+
 ## 1. 이어서 하는지 확인
 `problems/*/state.md` 중 `stage: done`이 아닌 것이 있으면 사용자에게 이어서 할지 묻는다. 이어서 하면 그 `state.md`의 `다음 할 일`부터 진행한다.
 

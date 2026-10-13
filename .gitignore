@@ -2,3 +2,5 @@ problems/
 .build/
 __pycache__/
 refs/solvedac.json
+harness.local.json
+.claude/settings.local.json

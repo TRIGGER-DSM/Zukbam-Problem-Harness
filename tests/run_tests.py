@@ -389,6 +389,20 @@ class WelcomeTest(unittest.TestCase):
             self.assertIn("- a (단계: reviewed)", out["systemMessage"])
             self.assertNotIn("- b", out["systemMessage"])
 
+    def test_menu_asks_model_first_time(self):
+        with tempfile.TemporaryDirectory() as d:
+            out = self.welcome(Path(d))
+            self.assertIn("처음 쓰시는군요!", out["systemMessage"])
+            self.assertIn("0절(모델 정하기)", out["hookSpecificOutput"]["additionalContext"])
+
+    def test_menu_shows_model_config(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "harness.local.json").write_text('{"main_model": "sonnet", "helper_model": "haiku"}')
+            out = self.welcome(root)
+            self.assertNotIn("처음 쓰시는군요!", out["systemMessage"])
+            self.assertIn("모델: 메인 sonnet, 보조 에이전트 haiku", out["systemMessage"])
+
 
 # ---- 참고 문제 조회 ----
 
